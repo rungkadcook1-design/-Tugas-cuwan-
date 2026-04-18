@@ -3,26 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halaman Tugas</title>
+    <title>Halaman Tugas Cuan</title>
     <style>
-        body { font-family: sans-serif; background: #121212; color: white; text-align: center; padding-top: 50px; }
-        .box { background: #1e1e1e; padding: 25px; border-radius: 15px; display: inline-block; width: 90%; max-width: 350px; border: 1px solid #333; }
-        #timer { font-size: 40px; margin: 15px 0; color: #ffcc00; font-weight: bold; }
-        .tombol { background: #ff4757; color: white; padding: 15px 25px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; display: none; width: 100%; font-size: 16px; }
-        .kode { background: #333; padding: 15px; border-radius: 8px; color: #00ff00; font-size: 28px; margin-top: 15px; display: none; border: 1px dashed #777; font-weight: bold; letter-spacing: 3px; }
+        /* Gaya Tampilan Dark Mode Profesional */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; color: white; text-align: center; padding-top: 50px; margin: 0; }
+        .box { background: #1e1e1e; padding: 30px; border-radius: 20px; display: inline-block; width: 90%; max-width: 380px; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        /* Gaya Judul & Timer */
+        h3 { margin-bottom: 20px; color: #bbb; }
+        #timer { font-size: 50px; margin: 20px 0; color: #ffcc00; font-weight: bold; text-shadow: 0 0 15px rgba(255, 204, 0, 0.3); }
+        
+        /* Tombol Ambil Kode */
+        .tombol { background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; padding: 18px 25px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; display: none; width: 100%; font-size: 18px; transition: transform 0.2s; }
+        .tombol:active { transform: scale(0.95); }
+        
+        /* Tampilan Kode Rahasia */
+        .kode-box { background: #2d2d2d; padding: 20px; border-radius: 12px; color: #00ff00; font-size: 32px; margin-top: 20px; display: none; border: 2px dashed #555; font-weight: bold; letter-spacing: 5px; animation: fadeIn 0.5s; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .instruksi { font-size: 12px; color: #888; margin-top: 15px; }
     </style>
 </head>
 <body>
 
 <div class="box" id="mainBox">
-    <h3 id="judul">Tunggu bentar ya...</h3>
-    <div id="timer">15</div>
-    <button id="btn" class="tombol" onclick="ambil()">KLIK BUAT AMBIL KODE</button>
-    <div id="hasil" class="kode"></div>
+    <h3 id="judul">Harap Menunggu...</h3>
+    <div id="timer">20</div>
+    
+    <button id="btn" class="tombol" onclick="ambilTugas()">KLIK AMBIL KODE</button>
+    
+    <div id="hasil" class="kode-box"></div>
+    
+    <p class="instruksi" id="info">Jangan tutup halaman ini sampai timer selesai.</p>
 </div>
 
 <script>
-    // CEK IP INDONESIA (ANTI-VPN)
+    // 1. CEK LOKASI (ANTI-VPN)
     fetch('https://ipapi.co/json/').then(res => res.json()).then(data => {
         if (data.country !== "ID") {
             document.getElementById('mainBox').innerHTML = "<h3>AKSES DITOLAK</h3><p>Matikan VPN dan gunakan IP Indonesia!</p>";
@@ -31,8 +48,9 @@
         }
     }).catch(() => mulaiTimer());
 
+    // 2. LOGIKA TIMER 20 DETIK
     function mulaiTimer() {
-        let detik = 15;
+        let detik = 20;
         let hitung = setInterval(() => {
             detik--;
             document.getElementById('timer').innerText = detik;
@@ -40,15 +58,14 @@
                 clearInterval(hitung);
                 document.getElementById('timer').style.display = 'none';
                 document.getElementById('btn').style.display = 'block';
-                document.getElementById('judul').innerText = "Tugas Selesai!";
+                document.getElementById('judul').innerText = "Tugas Siap!";
+                document.getElementById('info').innerText = "Klik tombol di atas untuk melihat kode.";
             }
         }, 1000);
     }
 
-    function ambil() {
-        // --- PASANG LINK IKLAN KAMU DI SINI ---
-        window.open("https://www.google.com", "_blank"); 
-        
+    // 3. LOGIKA KLIK AMBIL KODE
+    function ambilTugas() {
         // Generate Kode Acak 6 Digit
         let teks = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
         let kodenya = "";
@@ -56,10 +73,18 @@
             kodenya += teks.charAt(Math.floor(Math.random() * teks.length)); 
         }
         
+        // Tampilkan Kode secara Instan
         document.getElementById('hasil').innerText = kodenya;
         document.getElementById('hasil').style.display = 'block';
         document.getElementById('btn').style.display = 'none';
-        document.getElementById('judul').innerText = "Salin kodenya ke Bot:";
+        document.getElementById('judul').innerText = "SALIN KODE BERIKUT:";
+        document.getElementById('info').innerHTML = "<b style='color:red;'>Halaman akan berpindah ke iklan dalam 2 detik...</b>";
+
+        // Tunggu 2 detik agar user sempat copy/lihat kode, lalu pindah ke iklan (Tab yang sama)
+        setTimeout(() => {
+            // --- GANTI LINK DI BAWAH INI DENGAN LINK IKLAN KAMU ---
+            window.location.href = "https://link-iklan-adsterra-kamu.com"; 
+        }, 2500);
     }
 </script>
 
