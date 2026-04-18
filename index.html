@@ -3,101 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verifikasi Tugas Cuan</title>
+    <title>Halaman Tugas</title>
     <style>
-        body { font-family: sans-serif; background: #0f0f0f; color: white; text-align: center; padding: 40px 20px; }
-        .card { background: #1a1a1a; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: inline-block; width: 100%; max-width: 400px; border: 1px solid #333; }
-        #timer { font-size: 3rem; margin: 20px 0; color: #ff4757; font-weight: bold; }
-        .btn { background: #007bff; color: white; padding: 15px 35px; border: none; border-radius: 10px; font-size: 1.1rem; cursor: pointer; display: none; font-weight: bold; }
-        .kode-area { background: #262626; padding: 20px; border-radius: 10px; border: 2px dashed #fbff00; color: #fbff00; font-size: 2rem; letter-spacing: 5px; margin: 15px 0; display: none; }
+        body { font-family: sans-serif; background: #121212; color: white; text-align: center; padding-top: 50px; }
+        .box { background: #1e1e1e; padding: 25px; border-radius: 15px; display: inline-block; width: 90%; max-width: 350px; border: 1px solid #333; }
+        #timer { font-size: 40px; margin: 15px 0; color: #ffcc00; font-weight: bold; }
+        .tombol { background: #ff4757; color: white; padding: 15px 25px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; display: none; width: 100%; font-size: 16px; }
+        .kode { background: #333; padding: 15px; border-radius: 8px; color: #00ff00; font-size: 28px; margin-top: 15px; display: none; border: 1px dashed #777; font-weight: bold; letter-spacing: 3px; }
     </style>
 </head>
 <body>
-<div class="card" id="mainCard">
-    <h2>VERIFIKASI TUGAS</h2>
-    <p id="msg">Tunggu sebentar, sedang mengecek koneksi...</p>
+
+<div class="box" id="mainBox">
+    <h3 id="judul">Tunggu bentar ya...</h3>
     <div id="timer">15</div>
-    <button id="btnClaim" class="btn" onclick="showCode()">Dapatkan Kode</button>
-    <div id="codeBox" class="kode-area"></div>
+    <button id="btn" class="tombol" onclick="ambil()">KLIK BUAT AMBIL KODE</button>
+    <div id="hasil" class="kode"></div>
 </div>
 
 <script>
-    // SISTEM ANTI-VPN (Hanya Indonesia)
+    // CEK IP INDONESIA (ANTI-VPN)
     fetch('https://ipapi.co/json/').then(res => res.json()).then(data => {
         if (data.country !== "ID") {
-            document.getElementById('mainCard').innerHTML = "<h2>AKSES DITOLAK</h2><p>Gunakan IP Indonesia tanpa VPN!</p>";
-        } else { startTimer(); }
-    }).catch(() => startTimer());
+            document.getElementById('mainBox').innerHTML = "<h3>AKSES DITOLAK</h3><p>Matikan VPN dan gunakan IP Indonesia!</p>";
+        } else {
+            mulaiTimer();
+        }
+    }).catch(() => mulaiTimer());
 
-    function startTimer() {
-        let timeLeft = 15;
-        let countdown = setInterval(() => {
-            timeLeft--;
-            document.getElementById('timer').innerText = timeLeft;
-            if (timeLeft <= 0) {
-                clearInterval(countdown);
+    function mulaiTimer() {
+        let detik = 15;
+        let hitung = setInterval(() => {
+            detik--;
+            document.getElementById('timer').innerText = detik;
+            if (detik <= 0) {
+                clearInterval(hitung);
                 document.getElementById('timer').style.display = 'none';
-                document.getElementById('btnClaim').style.display = 'inline-block';
+                document.getElementById('btn').style.display = 'block';
+                document.getElementById('judul').innerText = "Tugas Selesai!";
             }
         }, 1000);
     }
 
-    function showCode() {
-        // GANTI LINK DI BAWAH DENGAN LINK IKLAN ADSTERRA KAMU
+    function ambil() {
+        // --- PASANG LINK IKLAN KAMU DI SINI ---
         window.open("https://www.google.com", "_blank"); 
         
-        let chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-        let code = "";
-        for (let i = 0; i < 6; i++) { code += chars.charAt(Math.floor(Math.random() * chars.length)); }
-        document.getElementById('codeBox').innerText = code;
-        document.getElementById('codeBox').style.display = 'block';
-        document.getElementById('btnClaim').style.display = 'none';
-    }
-</script>
-</body>
-</html>
-    // SISTEM ANTI-VPN
-    fetch('https://ipapi.co/json/')
-    .then(res => res.json())
-    .then(data => {
-        if (data.country !== "ID") {
-            document.getElementById('mainCard').innerHTML = "<h2>AKSES DITOLAK</h2><p>Tugas ini hanya untuk wilayah Indonesia. Matikan VPN Anda!</p>";
-        } else {
-            startTimer();
-        }
-    }).catch(() => startTimer());
-
-    function startTimer() {
-        let timeLeft = 15;
-        document.getElementById('msg').innerText = "Mohon tunggu sebentar...";
-        let countdown = setInterval(() => {
-            timeLeft--;
-            document.getElementById('timer').innerText = timeLeft;
-            if (timeLeft <= 0) {
-                clearInterval(countdown);
-                document.getElementById('timer').style.display = 'none';
-                document.getElementById('btnClaim').style.display = 'inline-block';
-                document.getElementById('msg').innerText = "Siap! Klik tombol di bawah.";
-            }
-        }, 1000);
-    }
-
-    function showCode() {
-        // Ganti link di bawah dengan link iklan Adsterra/Monetag kamu
-        window.open("https://www.google.com", "_blank");
-        
-        // Membuat kode acak 6 digit
-        let chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-        let code = "";
-        for (let i = 0; i < 6; i++) {
-            code += chars.charAt(Math.floor(Math.random() * chars.length));
+        // Generate Kode Acak 6 Digit
+        let teks = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        let kodenya = "";
+        for (let i = 0; i < 6; i++) { 
+            kodenya += teks.charAt(Math.floor(Math.random() * teks.length)); 
         }
         
-        document.getElementById('finalCode').innerText = code;
-        document.getElementById('codeBox').style.display = 'block';
-        document.getElementById('btnClaim').style.display = 'none';
-        document.getElementById('msg').innerText = "Tugas Selesai!";
+        document.getElementById('hasil').innerText = kodenya;
+        document.getElementById('hasil').style.display = 'block';
+        document.getElementById('btn').style.display = 'none';
+        document.getElementById('judul').innerText = "Salin kodenya ke Bot:";
     }
 </script>
+
 </body>
 </html>
