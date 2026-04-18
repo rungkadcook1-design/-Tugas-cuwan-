@@ -5,67 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verifikasi Tugas Cuan</title>
     <style>
-        body { font-family: sans-serif; background: #121212; color: white; text-align: center; padding: 50px; }
-        .card { background: #1e1e1e; padding: 30px; border-radius: 15px; display: inline-block; max-width: 90%; border: 1px solid #333; }
-        #timer { font-size: 2.5rem; color: #00ff88; margin: 20px 0; font-weight: bold; }
-        .btn { background: #007bff; color: white; padding: 15px 30px; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; display: none; text-decoration: none; }
-        .error { color: #ff4757; font-weight: bold; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0f0f; color: white; text-align: center; padding: 40px 20px; }
+        .card { background: #1a1a1a; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: inline-block; width: 100%; max-width: 400px; border: 1px solid #333; }
+        h2 { color: #00ff88; margin-bottom: 10px; }
+        #timer { font-size: 3rem; margin: 20px 0; color: #ff4757; font-weight: bold; }
+        .btn { background: #007bff; color: white; padding: 15px 35px; border: none; border-radius: 10px; font-size: 1.1rem; cursor: pointer; display: none; transition: 0.3s; text-transform: uppercase; font-weight: bold; }
+        .btn:hover { background: #0056b3; transform: scale(1.05); }
+        #codeBox { display: none; margin-top: 25px; animation: fadeIn 0.5s; }
+        .kode-area { background: #262626; padding: 20px; border-radius: 10px; border: 2px dashed #fbff00; color: #fbff00; font-size: 2rem; letter-spacing: 5px; margin: 15px 0; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div class="card" id="mainCard">
-    <h2>Keamanan Verifikasi</h2>
-    <p id="statusMsg">Mengecek lokasi Anda...</p>
+    <h2>VERIFIKASI TUGAS</h2>
+    <p id="msg">Mengecek koneksi aman...</p>
     
     <div id="timer">15</div>
     
-    <button id="claimBtn" class="btn" onclick="openAds()">Dapatkan Kode Verifikasi</button>
-    
-    <div id="codeBox" style="display:none; margin-top: 20px;">
-        <p>Gunakan kode ini di Bot:</p>
-        <h1 style="background: #333; padding: 15px; border-radius: 5px; color: #fbff00; letter-spacing: 5px; border: 1px dashed #fbff00;">CUAN99</h1>
+    <button id="btnClaim" class="btn" onclick="showCode()">Dapatkan Kode</button>
+
+    <div id="codeBox">
+        <p>Salin kode verifikasi Anda:</p>
+        <div class="kode-area" id="finalCode">------</div>
+        <p style="font-size: 0.8rem; color: #888;">*Kode ini hanya berlaku untuk sesi ini dan akan berubah setiap kali tugas diambil.</p>
     </div>
 </div>
 
 <script>
-    // 1. CEK VPN (Hanya izinkan Indonesia)
+    // SISTEM ANTI-VPN
     fetch('https://ipapi.co/json/')
     .then(res => res.json())
     .then(data => {
         if (data.country !== "ID") {
-            document.getElementById('mainCard').innerHTML = `<h2 class="error">⚠️ AKSES DITOLAK</h2><p>Matikan VPN Anda! Tugas ini hanya untuk wilayah Indonesia.</p>`;
+            document.getElementById('mainCard').innerHTML = "<h2>AKSES DITOLAK</h2><p>Tugas ini hanya untuk wilayah Indonesia. Matikan VPN Anda!</p>";
         } else {
             startTimer();
         }
-    })
-    .catch(() => startTimer()); 
+    }).catch(() => startTimer());
 
-    // 2. LOGIKA TIMER
-    let timeLeft = 15;
     function startTimer() {
-        document.getElementById('statusMsg').innerText = "Mohon tunggu sebentar...";
+        let timeLeft = 15;
+        document.getElementById('msg').innerText = "Mohon tunggu sebentar...";
         let countdown = setInterval(() => {
             timeLeft--;
             document.getElementById('timer').innerText = timeLeft;
             if (timeLeft <= 0) {
                 clearInterval(countdown);
                 document.getElementById('timer').style.display = 'none';
-                document.getElementById('claimBtn').style.display = 'inline-block';
+                document.getElementById('btnClaim').style.display = 'inline-block';
+                document.getElementById('msg').innerText = "Siap! Klik tombol di bawah.";
             }
         }, 1000);
     }
 
-    // 3. LOGIKA IKLAN
-    function openAds() {
-        // Ganti Link Iklan Anda di Sini (Direct Link Adsterra/Monetag)
-        window.open("https://www.google.com", "_blank"); 
+    function showCode() {
+        // Ganti link di bawah dengan link iklan Adsterra/Monetag kamu
+        window.open("https://www.google.com", "_blank");
         
+        // Membuat kode acak 6 digit
+        let chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        let code = "";
+        for (let i = 0; i < 6; i++) {
+            code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        
+        document.getElementById('finalCode').innerText = code;
         document.getElementById('codeBox').style.display = 'block';
-        document.getElementById('claimBtn').style.display = 'none';
-        document.getElementById('statusMsg').innerText = "Tugas Selesai!";
+        document.getElementById('btnClaim').style.display = 'none';
+        document.getElementById('msg').innerText = "Tugas Selesai!";
     }
 </script>
-
 </body>
 </html>
