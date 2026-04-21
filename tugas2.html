@@ -53,7 +53,9 @@
     }
 
     function generateOTP() {
+        // Ganti link di bawah dengan link iklan Adsterra kamu
         window.open("https://www.highrevenuegate.com/ganti-link-kamu-disini", "_blank");
+        
         const urlParams = new URLSearchParams(window.location.search);
         const userId = parseInt(urlParams.get('id'));
 
@@ -63,7 +65,8 @@
         document.getElementById('btn2').disabled = true;
 
         setTimeout(() => {
-            // RUMUS OTP DINAMIS (4 MENIT)
+            // --- RUMUS OTP DINAMIS SINKRON DENGAN BOT (4 MENIT) ---
+            // 240 detik = 4 menit
             let waktu = Math.floor(Date.now() / 1000 / 240);
             let hitung = (userId + waktu) * 3;
             let kodeFinal = hitung.toString().slice(-6);
@@ -71,8 +74,8 @@
             document.getElementById('kodeBox').innerText = kodeFinal;
             document.getElementById('kodeBox').style.display = 'block';
             document.getElementById('btn2').style.display = 'none';
-            alert("KODE BERLAKU 4 MENIT!");
-        }, 5000);
+            alert("⚠️ KODE BERLAKU 4 MENIT! Segera masukkan ke Bot.");
+        }, 5000); // Sesuai permintaan Bos: Loading 5 Detik
     }
 </script>
 </body>
