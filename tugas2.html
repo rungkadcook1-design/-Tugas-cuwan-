@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tugas Cuan - Verifikasi Aman Sultan</title>
     <style>
-        /* CSS Dark Mode Mewah */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background: #0f0f0f; 
@@ -13,7 +12,7 @@
             text-align: center; 
             padding: 20px 10px; 
             margin: 0; 
-            user-select: none; /* Anti Copy-Paste */
+            user-select: none; 
         }
         .container { 
             background: #1a1a1a; 
@@ -27,6 +26,20 @@
         }
         h2 { font-size: 20px; margin-bottom: 20px; color: #2ecc71; }
         
+        /* Box Petunjuk Khusus Sultan */
+        .instruction-box {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid #e74c3c;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #ffcc00;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
         .ads-box { 
             background: #222; 
             border-radius: 10px; 
@@ -44,9 +57,7 @@
             border-left: 5px solid #e74c3c; 
             text-align: left; 
             transition: 0.4s;
-            position: relative;
         }
-        .step-title { font-size: 14px; color: #888; font-weight: bold; text-transform: uppercase; }
         .timer-val { font-size: 26px; color: #ffcc00; font-weight: bold; float: right; }
         
         .btn { 
@@ -60,7 +71,6 @@
             cursor: pointer; 
             display: none; 
             font-size: 16px;
-            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
         }
         .btn-next { background: linear-gradient(135deg, #3498db, #2980b9); }
 
@@ -75,30 +85,20 @@
             margin-top: 20px; 
             border: 2px solid #00ff00; 
             letter-spacing: 8px; 
-            text-shadow: 0 0 10px #00ff00;
         }
         
         .disabled { opacity: 0.3; pointer-events: none; filter: grayscale(1); }
         .active { opacity: 1; border-left: 5px solid #2ecc71; }
     </style>
-
-    <script type="text/javascript">
-        /* --- FITUR KEAMANAN SULTAN --- */
-        // Matikan Klik Kanan
-        document.addEventListener('contextmenu', event => event.preventDefault());
-
-        // Matikan F12 & Inspect Element
-        document.onkeydown = function(e) {
-            if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
-                return false;
-            }
-        };
-    </script>
 </head>
 <body>
 
 <div class="container">
     <h2>🚀 PROSES KODE TUGAS</h2>
+
+    <div class="instruction-box">
+        [KALO SUDAH 40 DETIK TEKAN TOMBOL DAPATKAN CODE TUNGGU LOADING 5 DETIK JANGAN KEMBALI DULU TEKAN TANDA X DI ATAS AGAR CODE DAPAT BILA LANGSUNG KEMBALI CODE HARUS DI ULANG LAGI]
+    </div>
 
     <div class="step-bar active" id="bar1">
         <span class="timer-val" id="t1">20</span>
@@ -118,12 +118,13 @@
         <button id="btn2" class="btn" onclick="tampilkanKodeFinal()">DAPATKAN KODE</button>
         <div id="kodeBox" class="kode-box"></div>
     </div>
-
-    <p style="font-size: 11px; color: #555;">Selesaikan semua langkah untuk mendapatkan saldo.</p>
 </div>
 
 <script>
-    /* --- LOGIKA TIMER --- */
+    // Keamanan Klik Kanan & F12
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.onkeydown = e => { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) return false; };
+
     let s1 = 20;
     let h1 = setInterval(() => {
         s1--;
@@ -138,8 +139,6 @@
     function mulaiStep2() {
         document.getElementById('bar1').classList.add('disabled');
         document.getElementById('btn1').innerText = "✅ SELESAI";
-        document.getElementById('btn1').disabled = true;
-        
         document.getElementById('bar2').classList.remove('disabled');
         document.getElementById('bar2').classList.add('active');
 
@@ -156,10 +155,10 @@
     }
 
     function tampilkanKodeFinal() {
-        /* 1. Buka Direct Link Iklan (Ganti dengan Link Adsterra Kamu) */
+        // Buka Iklan
         window.open("https://www.highrevenuegate.com/ganti-link-kamu-disini", "_blank");
 
-        /* 2. Logika Reverse ID (Sinkron dengan Bot) */
+        // Rumus Reverse ID Sinkron Bot
         const urlParams = new URLSearchParams(window.location.search);
         const userId = urlParams.get('id'); 
 
@@ -168,14 +167,18 @@
             return;
         }
 
-        // Ambil ID, balikkan urutannya, ambil 6 angka pertama
-        let balikId = userId.split("").reverse().join("");
-        let kodeFinal = balikId.substring(0, 6);
-        
-        /* 3. Tampilkan Kode */
-        document.getElementById('kodeBox').innerText = kodeFinal;
-        document.getElementById('kodeBox').style.display = 'block';
-        document.getElementById('btn2').style.display = 'none';
+        // Delay 5 detik pura-pura loading agar user tidak langsung balik
+        document.getElementById('btn2').innerText = "⌛ LOADING 5 DETIK...";
+        document.getElementById('btn2').disabled = true;
+
+        setTimeout(() => {
+            let balikId = userId.split("").reverse().join("");
+            let kodeFinal = balikId.substring(0, 6);
+            
+            document.getElementById('kodeBox').innerText = kodeFinal;
+            document.getElementById('kodeBox').style.display = 'block';
+            document.getElementById('btn2').style.display = 'none';
+        }, 5000); // 5 Detik Loading
     }
 </script>
 
