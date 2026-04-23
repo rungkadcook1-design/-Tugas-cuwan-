@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas Cuan - Sultan Aman 💰</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #0f0f1e 100%);
+            background-attachment: fixed;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            user-select: none;
+            overflow-x: hidden;
+        }
+
+        /* ANIMASI BACKGROUND */
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(46, 204, 113, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(46, 204, 113, 0.8); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* CONTAINER */
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: rgba(15, 15, 30, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 
+                        0 0 40px rgba(46, 204, 113, 0.3);
+            border: 2px solid rgba(46, 204, 113, 0.2);
+            animation: floatUp 0.8s ease-out;
+        }
+
+        /* HEADER */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: floatUp 0.8s ease-out 0.1s backwards;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            background: linear-gradient(135deg, #2ecc71, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+            text-shadow: 0 0 20px rgba(46, 204, 113, 0.3);
+        }
+
+        .header p {
+            color: #888;
+            font-size: 12px;
+        }
+
+        .logo-anime {
+            font-size: 40px;
+            animation: bounce 2s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        /* STEP BAR */
+        .step-bar {
+            background: rgba(30, 30, 50, 0.8);
+            border: 2px solid rgba(100, 100, 150, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            animation: floatUp 0.8s ease-out both;
+        }
+
+        .step-bar:nth-child(2) { animation-delay: 0.2s; }
+        .step-bar:nth-child(3) { animation-delay: 0.4s; }
+
+        .step-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(46, 204, 113, 0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        .step-bar.active {
+            border-color: #2ecc71;
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.5), inset 0 0 20px rgba(46, 204, 113, 0.1);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .step-bar.completed {
+            border-color: #27ae60;
+            background: rgba(39, 174, 96, 0.1);
+        }
+
+        .step-bar.disabled {
+            opacity: 0.4;
+            pointer-events: none;
+            filter: grayscale(1);
+        }
+
+        .step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .step-title {
+            font-size: 14px;
+            color: #aaa;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .timer-badge {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            min-width: 60px;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .timer-badge.hide {
+            display: none;
+        }
+
+        /* ADS BOX */
+        .ads-box {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px dashed #444;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ads-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        .ads-placeholder {
+            color: #666;
+            font-size: 11px;
+            text-align: center;
+            z-index: 1;
+        }
+
+        /* BUTTON */
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            box-shadow: 0 5px 20px rgba(46, 204, 113, 0.4);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(46, 204, 113, 0.6);
+        }
+
+        .btn-success:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* KODE BOX */
+        .kode-display {
+            background: rgba(0, 0, 0, 0.9);
+            border: 3px solid #00ff88;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+            animation: floatUp 0.6s ease-out;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+            position: relative;
+        }
+
+        .kode-display::before {
+            content: '✓';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2ecc71;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .kode-label {
+            color: #00ff88;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .kode-value {
+            font-size: 48px;
+            font-weight: bold;
+            color: #00ff88;
+            letter-spacing: 8px;
+            text-shadow: 0 0 20px #00ff88;
+            font-family: 'Courier New', monospace;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .kode-info {
+            color: #666;
+            font-size: 11px;
+            margin-top: 10px;
+        }
+
+        /* INFO BOX */
+        .info-box {
+            background: rgba(46, 204, 113, 0.1);
+            border-left: 4px solid #2ecc71;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-top: 15px;
+            font-size: 12px;
+            color: #2ecc71;
+            display: none;
+        }
+
+        .info-box.show {
+            display: block;
+            animation: floatUp 0.5s ease-out;
+        }
+
+        /* PROGRESS BAR */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(100, 100, 150, 0.3);
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 33%;
+            background: linear-gradient(90deg, #2ecc71, #00ff88);
+            border-radius: 10px;
+            transition: width 0.4s ease;
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.8);
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+            margin-top: 25px;
+            border-top: 1px solid rgba(100, 100, 150, 0.2);
+            padding-top: 15px;
+        }
+
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                border-radius: 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .kode-value {
+                font-size: 36px;
+                letter-spacing: 6px;
+            }
+
+            .btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+
+        /* LOADING SPINNER */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(46, 204, 113, 0.3);
+            border-top: 3px solid #2ecc71;
+            border-radius: 50%;
+            animation: rotate 1s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        /* SUCCESS ANIMATION */
+        @keyframes checkmark {
+            0% { transform: scale(0) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .checkmark {
+            animation: checkmark 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- HEADER -->
+    <div class="header">
+        <div class="logo-anime">🚀</div>
+        <h1>TUGAS CUAN SULTAN</h1>
+        <p>Dapatkan Reward dengan Mudah</p>
+    </div>
+
+    <!-- STEP 1: KONEKSI -->
+    <div class="step-bar active" id="bar1">
+        <div class="step-header">
+            <span class="step-title">📡 Langkah 1: Cek Koneksi</span>
+            <span class="timer-badge" id="timer1">20</span>
+        </div>
+        
+        <div class="ads-box">
+            <div class="ads-placeholder">
+                <!-- ADSTERRA BANNER 320x50 -->
+                <div id="ads-1">
+                    <p>[ IKLAN ADSTERRA 320x50 ]</p>
+                </div>
+            </div>
+        </div>
+
+        <button id="btn1" class="btn btn-success" onclick="mulaiStep2()">
+            ▶ LANJUT KE LANGKAH 2
+        </button>
+    </div>
+
+    <!-- STEP 2: VALIDASI HUMAN -->
+    <div class="step-bar disabled" id="bar2">
+        <div class="step-header">
+            <span class="step-title">👤 Langkah 2: Validasi Human</span>
+            <span class="timer-badge" id="timer2">20</span>
+        </div>
+
+        <div class="ads-box">
+            <div class="ads-placeholder">
+                <!-- MONTAG BANNER 300x250 -->
+                <div id="ads-2">
+                    <p>[ IKLAN MONTAG 300x250 ]</p>
+                </div>
+            </div>
+        </div>
+
+        <button id="btn2" class="btn btn-success" onclick="tampilkanKode()">
+            💰 DAPATKAN KODE REWARD
+        </button>
+
+        <div class="kode-display" id="kodeDisplay">
+            <div class="kode-label">🔐 Kode Reward Anda</div>
+            <div class="kode-value" id="kodeValue">------</div>
+            <div class="kode-info">📋 Masukkan kode ini di bot Telegram</div>
+        </div>
+
+        <div class="info-box" id="infoBox">
+            ✅ Kode sudah siap! Salin dan masukkan ke bot Telegram untuk mendapatkan reward.
+        </div>
+    </div>
+
+    <!-- PROGRESS BAR -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        👤 User ID: <span id="userIdDisplay" style="color: #2ecc71; font-weight: bold;">Loading...</span><br>
+        ✅ Selesaikan semua langkah untuk mendapatkan reward<br>
+        🔐 Sistem aman & terenkripsi
+    </div>
+</div>
+
+<!-- SCRIPT -->
+<script>
+    /* === ANTI-CHEAT SECURITY === */
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    
+    document.onkeydown = function(e) {
+        if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
+            return false;
+        }
+    };
+
+    let devtools = { open: false };
+    setInterval(() => {
+        if (window.outerHeight - window.innerHeight > 160 || window.outerWidth - window.innerWidth > 160) {
+            if (!devtools.open) {
+                devtools.open = true;
+                document.body.innerHTML = "<h1 style='text-align:center; padding:50px;'>❌ Akses Ditolak!</h1>";
+            }
+        } else {
+            devtools.open = false;
+        }
+    }, 500);
+
+    /* === AMBIL URL PARAMETERS === */
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('id') || 'unknown';
+    const timestamp = parseInt(urlParams.get('ts')) || Math.floor(Date.now() / 1000);
+    const signature = urlParams.get('sig') || 'none';
+
+    document.getElementById('userIdDisplay').innerText = userId;
+
+    /* === GENERATE KODE (FORMULA SAMA DENGAN BOT) === */
+    function generateCode() {
+        const timeInterval = Math.floor(timestamp / 240);
+        const kodeFormula = (parseInt(userId) + timeInterval) * 3;
+        const kode = String(kodeFormula).slice(-6);
+        return kode;
+    }
+
+    const kodeFinal = generateCode();
+
+    /* === TIMER STEP 1 === */
+    let s1 = 20;
+    let h1 = setInterval(() => {
+        s1--;
+        document.getElementById('timer1').innerText = s1;
+        
+        if (s1 <= 0) {
+            clearInterval(h1);
+            document.getElementById('timer1').classList.add('hide');
+            document.getElementById('btn1').style.display = 'block';
+        }
+    }, 1000);
+
+    /* === LANJUT KE STEP 2 === */
+    function mulaiStep2() {
+        document.getElementById('bar1').classList.add('completed');
+        document.getElementById('btn1').disabled = true;
+        document.getElementById('btn1').innerHTML = '✅ SELESAI';
+        
+        document.getElementById('bar2').classList.remove('disabled');
+        document.getElementById('bar2').classList.add('active');
+
+        document.getElementById('progressFill').style.width = '66%';
+
+        let s2 = 20;
+        let h2 = setInterval(() => {
+            s2--;
+            document.getElementById('timer2').innerText = s2;
+            
+            if (s2 <= 0) {
+                clearInterval(h2);
+                document.getElementById('timer2').classList.add('hide');
+                document.getElementById('btn2').style.display = 'block';
+            }
+        }, 1000);
+    }
+
+    /* === TAMPILKAN KODE === */
+    function tampilkanKode() {
+        // BUKA IKLAN (Random Adsterra atau Montag)
+        const ads = [
+            "https://rungkadcook1-design.github.io/-Tugas-cuwan-/index.html",
+            "https://rungkadcook1-design.github.io/-Tugas-cuwan-/tugas2.html"
+        ];
+        
+        const randomAds = ads[Math.floor(Math.random() * ads.length)];
+        window.open(randomAds, "_blank", "width=800,height=600");
+
+        // UPDATE UI
+        document.getElementById('btn2').disabled = true;
+        document.getElementById('btn2').innerHTML = '<span class="spinner"></span>Processing...';
+
+        // DELAY UNTUK SIMULASI
+        setTimeout(() => {
+            document.getElementById('kodeValue').innerText = kodeFinal;
+            document.getElementById('kodeDisplay').style.display = 'block';
+            document.getElementById('infoBox').classList.add('show');
+            document.getElementById('btn2').style.display = 'none';
+            document.getElementById('progressFill').style.width = '100%';
+
+            // LOG DEBUG
+            console.log("=== TUGAS VERIFIED ===");
+            console.log("User ID:", userId);
+            console.log("Timestamp:", timestamp);
+            console.log("Signature:", signature);
+            console.log("Generated Code:", kodeFinal);
+            console.log("=====================");
+        }, 1500);
+    }
+
+    /* === ANTI-COPY KODE === */
+    document.getElementById('kodeValue').addEventListener('copy', function(e) {
+        e.preventDefault();
+        alert("❌ Copy kode tidak diizinkan!\nSilakan masukkan manual di bot Telegram.");
+    });
+
+    /* === LAZY LOAD ADS === */
+    window.addEventListener('load', () => {
+        // Ini adalah placeholder untuk iklan asli
+        // Ganti dengan kode Adsterra dan Montag Anda
+        
+        // ADSTERRA
+        // Uncomment untuk menggunakan:
+        // (adsbygoogle = window.adsbygoogle || []).push({});
+        
+        // MONTAG
+        // Uncomment untuk menggunakan:
+        // var m5 = document.createElement('script');
+        // m5.type = 'text/javascript';
+        // m5.src = 'https://montag.js (ganti dengan script Montag Anda)';
+        // document.head.appendChild(m5);
+    });
+</script>
+
+</body>
+</html>
